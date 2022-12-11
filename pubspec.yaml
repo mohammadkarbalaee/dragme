@@ -32,6 +32,7 @@ dependencies:
   audioplayers: ^1.1.1
   flutter:
     sdk: flutter
+  transparent_image: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -57,6 +58,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/audios/ballhit.wav
+    - assets/image/bg.jpg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

@@ -1,11 +1,22 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:dragme/API/load_images.dart';
 import 'package:dragme/widgets/swipe_direction.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:transparent_image/transparent_image.dart';
 
-class DragMeApp extends StatelessWidget {
+class DragMeApp extends StatefulWidget {
   const DragMeApp({Key? key}) : super(key: key);
+
+  @override
+  State<DragMeApp> createState() => _DragMeAppState();
+}
+
+class _DragMeAppState extends State<DragMeApp> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +56,7 @@ class _DraggableSquareState extends State<DraggableSquare> {
   Timer activeTimerVertical = Timer(const Duration(seconds: 0), (){});
   AudioPlayer player = AudioPlayer();
   Source source = AssetSource('audios/ballhit.wav');
+  String imageUrl = getImageURL();
 
   @override
   void initState() {
@@ -109,19 +121,29 @@ class _DraggableSquareState extends State<DraggableSquare> {
     double validTopValue = MediaQuery.of(context).size.height - widget.squareSize;
     double validLeftValue = MediaQuery.of(context).size.width - widget.squareSize;
 
-    return Stack(
-      children: <Widget>[
-        Positioned(
-          left: _left,
-          top: _top,
-          child: GestureDetector(
-              onTap: () async {
-                await HapticFeedback.vibrate();
-              },
-              onVerticalDragEnd: (DragEndDetails details) {
-                activeTimerVertical.cancel();
-                SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dy, false);
-                activeTimerVertical = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/image/bg.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            left: _left,
+            top: _top,
+            child: GestureDetector(
+                onTap: () async {
+                  print('tapped');
+                  setState(() {
+                    imageUrl = getImageURL();
+                  });
+                },
+                onVerticalDragEnd: (DragEndDetails details) {
+                  activeTimerVertical.cancel();
+                  SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dy, false);
+                  activeTimerVertical = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
                     if(directionToGo == SwipeDirection.bottom) {
                       if(isOnBottomEdge(validTopValue)) {
                         player.play(source);
@@ -141,12 +163,12 @@ class _DraggableSquareState extends State<DraggableSquare> {
                       }
                     });
                   }
-                );
-              },
-              onHorizontalDragEnd: (DragEndDetails details) {
-                activeTimerHorizontal.cancel();
-                SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx, true);
-                activeTimerHorizontal = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
+                  );
+                },
+                onHorizontalDragEnd: (DragEndDetails details) {
+                  activeTimerHorizontal.cancel();
+                  SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx, true);
+                  activeTimerHorizontal = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
                     if(directionToGo == SwipeDirection.right) {
                       if(isOnRightEdge(validLeftValue)) {
                         player.play(source);
@@ -166,16 +188,29 @@ class _DraggableSquareState extends State<DraggableSquare> {
                       }
                     });
                   }
-                );
-              },
-              child: Container(
-                height: widget.squareSize,
-                width: widget.squareSize,
-                color: Colors.red,
-              )
+                  );
+                },
+                child: Container(
+                    height: widget.squareSize,
+                    width: widget.squareSize,
+                    color: Colors.transparent,
+                    child: Stack(
+                      children: [
+                        const Center(child: CircularProgressIndicator(),),
+                        FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: imageUrl,
+                          fit: BoxFit.cover,
+                          height: widget.squareSize,
+                          width: widget.squareSize,
+                        )
+                      ],
+                    )
+                )
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

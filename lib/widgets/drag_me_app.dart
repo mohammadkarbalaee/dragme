@@ -1,16 +1,14 @@
 import 'dart:async';
-import 'dart:math';
-
-import 'package:dragme/widgets/edges.dart';
 import 'package:dragme/widgets/swipe_direction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DragMeApp extends StatelessWidget {
   const DragMeApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double squareSize = MediaQuery.of(context).size.height / 7;
+    double squareSize = MediaQuery.of(context).size.height / 8;
     double initialLeft = (MediaQuery.of(context).size.width - squareSize) / 2;
     double initialTop = (MediaQuery.of(context).size.height - squareSize) / 2;
 
@@ -19,7 +17,7 @@ class DragMeApp extends StatelessWidget {
         squareSize: squareSize,
         initialLeft: initialLeft,
         initialTop: initialTop,
-        velocity: 3
+        velocity: 5
       )
     );
   }
@@ -112,6 +110,9 @@ class _DraggableSquareState extends State<DraggableSquare> {
           left: _left,
           top: _top,
           child: GestureDetector(
+              onTap: () async {
+                await HapticFeedback.vibrate();
+              },
               onVerticalDragEnd: (DragEndDetails details) {
                 activeTimerVertical.cancel();
                 SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dy, false);
@@ -158,29 +159,6 @@ class _DraggableSquareState extends State<DraggableSquare> {
                   }
                 );
               },
-              // onHorizontalDragEnd: (DragEndDetails details) {
-              //   activeTimerHorizontal.cancel();
-              //   SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx, true);
-              //   activeTimerHorizontal = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-              //     Edge edge = whichWallIsIt(left: _left, top: _top, validTop: validTopValue, validLeft: validLeftValue);
-              //     if(directionToGo == SwipeDirection.right) {
-              //       if(edge == Edge.right) {
-              //         directionToGo = SwipeDirection.left;
-              //       }
-              //     } else if(directionToGo == SwipeDirection.left) {
-              //       if(edge == Edge.left) {
-              //         directionToGo = SwipeDirection.right;
-              //       }
-              //     }
-              //     // setState(() {
-              //     //   if(directionToGo == SwipeDirection.right) {
-              //     //     _left = _left + 1;
-              //     //   } else if(directionToGo == SwipeDirection.left) {
-              //     //     _left = _left - 1;
-              //     //   }
-              //     // });
-              //   });
-              // },
               child: Container(
                 height: widget.squareSize,
                 width: widget.squareSize,

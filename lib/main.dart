@@ -19,10 +19,11 @@ void main() {
  * TODO: make the square contain image
  * TODO: get the image from and api from the internet
  * TODO: make the image changeable on tap
- * TODO: make the square bounce on wall collision
+ * TODO: make the square bounce on wall collision ✅
  * TODO: add sound effect on the collision
  * TODO: store the state and position of the object inside shared preferences
  * TODO: add an appbar and a menu to showcase your skills more
+ * TODO: add notifications to the app
  * TODO: write test for the app
  * TODO: do each part of the code in one branch and then merge it
  * TODO: make the UI better looking

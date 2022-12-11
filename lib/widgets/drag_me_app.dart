@@ -41,6 +41,7 @@ class DraggableSquare extends StatefulWidget {
 class _DraggableSquareState extends State<DraggableSquare> {
   double _left = 0;
   double _top = 0;
+  Timer activeTimer = Timer(const Duration(seconds: 0), (){});
 
   @override
   void initState() {
@@ -88,8 +89,9 @@ class _DraggableSquareState extends State<DraggableSquare> {
 
               },
               onHorizontalDragEnd: (DragEndDetails details) {
+                activeTimer.cancel();
                 SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx);
-                Timer.periodic(const Duration(milliseconds: 1), (timer) {
+                activeTimer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
                   if(directionToGo == SwipeDirection.right) {
                     if(isOnRightEnd(_left, validLeftValue)) {
                       directionToGo = SwipeDirection.left;

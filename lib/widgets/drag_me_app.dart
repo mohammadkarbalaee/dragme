@@ -57,6 +57,23 @@ class _DraggableSquareState extends State<DraggableSquare> {
     }
   }
 
+  bool isOnRightEnd(double left, double validLeftValue) {
+    bool isOnRightEnd = false;
+    if(left.floor() == validLeftValue.floor()) {
+      isOnRightEnd = true;
+    }
+    return isOnRightEnd;
+  }
+
+  bool isOnLeftEnd(double left) {
+    bool isOnRightEnd = false;
+    if(left.floor() == 0) {
+      print('on left');
+      isOnRightEnd = true;
+    }
+    return isOnRightEnd;
+  }
+
   @override
   Widget build(BuildContext context) {
     double validTopValue = MediaQuery.of(context).size.height - widget.squareSize;
@@ -72,9 +89,19 @@ class _DraggableSquareState extends State<DraggableSquare> {
                 SwipeDirection direction = detectSwipeDirection(details.delta.dx);
               },
               onHorizontalDragEnd: (DragEndDetails details) {
+                int directionToGo = 1;
                 Timer.periodic(const Duration(milliseconds: 10), (timer) {
+                  if(directionToGo == 1) {
+                    if(isOnRightEnd(_left, validLeftValue)) {
+                      directionToGo = -1;
+                    }
+                  } else if(directionToGo == -1) {
+                    if(isOnLeftEnd(_left)) {
+                      directionToGo = 1;
+                    }
+                  }
                   setState(() {
-                    _left = _left + 1;
+                    _left = _left + directionToGo;
                   });
                 });
                 print(details.velocity.pixelsPerSecond.dx);

@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:dragme/API/load_images.dart';
 import 'package:dragme/widgets/swipe_direction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class DragMeApp extends StatefulWidget {
@@ -55,7 +56,7 @@ class _DraggableSquareState extends State<DraggableSquare> {
   Timer activeTimerHorizontal = Timer(const Duration(seconds: 0), (){});
   Timer activeTimerVertical = Timer(const Duration(seconds: 0), (){});
   AudioPlayer player = AudioPlayer();
-  Source source = AssetSource('audios/ballhit.wav');
+  Source source = AssetSource('audios/soccerhit.mp3');
   String imageUrl = getImageURL();
 
   @override
@@ -64,7 +65,7 @@ class _DraggableSquareState extends State<DraggableSquare> {
     _left = widget.initialLeft;
     _top = widget.initialTop;
     player = AudioPlayer();
-    source = AssetSource('audios/ballhit.wav');
+    source = AssetSource('audios/soccerhit.mp3');
   }
 
   SwipeDirection detectSwipeDirection(double difference,bool isHorizontal) {
@@ -135,7 +136,6 @@ class _DraggableSquareState extends State<DraggableSquare> {
             top: _top,
             child: GestureDetector(
                 onTap: () async {
-                  print('tapped');
                   setState(() {
                     imageUrl = getImageURL();
                   });
@@ -162,8 +162,7 @@ class _DraggableSquareState extends State<DraggableSquare> {
                         _top = _top - 1;
                       }
                     });
-                  }
-                  );
+                  });
                 },
                 onHorizontalDragEnd: (DragEndDetails details) {
                   activeTimerHorizontal.cancel();
@@ -187,8 +186,7 @@ class _DraggableSquareState extends State<DraggableSquare> {
                         _left = _left - 1;
                       }
                     });
-                  }
-                  );
+                  });
                 },
                 child: Container(
                     height: widget.squareSize,

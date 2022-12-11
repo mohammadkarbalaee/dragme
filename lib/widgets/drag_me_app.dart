@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:dragme/widgets/edges.dart';
 import 'package:dragme/widgets/swipe_direction.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +42,8 @@ class DraggableSquare extends StatefulWidget {
 class _DraggableSquareState extends State<DraggableSquare> {
   double _left = 0;
   double _top = 0;
-  Timer activeTimer = Timer(const Duration(seconds: 0), (){});
+  Timer activeTimerHorizontal = Timer(const Duration(seconds: 0), (){});
+  Timer activeTimerVertical = Timer(const Duration(seconds: 0), (){});
 
   @override
   void initState() {
@@ -50,28 +52,37 @@ class _DraggableSquareState extends State<DraggableSquare> {
     _top = widget.initialTop;
   }
 
-  SwipeDirection detectSwipeDirection(double dx) {
-    if(dx > 0) {
-      return SwipeDirection.right;
+  SwipeDirection detectSwipeDirection(double difference,bool isHorizontal) {
+    if(isHorizontal) {
+      if(difference > 0) {
+        return SwipeDirection.right;
+      } else {
+        return SwipeDirection.left;
+      }
     } else {
-      return SwipeDirection.left;
+      if(difference > 0) {
+        return SwipeDirection.bottom;
+      } else {
+        return SwipeDirection.top;
+      }
     }
   }
 
-  bool isOnRightEnd(double left, double validLeftValue) {
-    bool isOnRightEnd = false;
-    if(left.floor() == validLeftValue.floor()) {
-      isOnRightEnd = true;
+
+  Edge whichWallIsIt({required double left, required double top, required double validTop, required double validLeft}) {
+    if(left.floor() == validLeft) {
+      return Edge.right;
+    } else if(left.floor() == 0) {
+      return Edge.left;
+    } else if(top.floor() == 0) {
+      return Edge.top;
+    } else {
+      return Edge.bottom;
     }
-    return isOnRightEnd;
   }
 
-  bool isOnLeftEnd(double left) {
-    bool isOnRightEnd = false;
-    if(left.floor() == 0) {
-      isOnRightEnd = true;
-    }
-    return isOnRightEnd;
+  void swipeAction() {
+
   }
 
   @override
@@ -85,39 +96,53 @@ class _DraggableSquareState extends State<DraggableSquare> {
           left: _left,
           top: _top,
           child: GestureDetector(
-              onHorizontalDragUpdate: (DragUpdateDetails details) {
-
-              },
-              onHorizontalDragEnd: (DragEndDetails details) {
-                activeTimer.cancel();
-                SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx);
-                activeTimer = Timer.periodic(const Duration(milliseconds: 10), (timer) {
-                  if(directionToGo == SwipeDirection.right) {
-                    if(isOnRightEnd(_left, validLeftValue)) {
-                      directionToGo = SwipeDirection.left;
+              onVerticalDragEnd: (DragEndDetails details) {
+                activeTimerVertical.cancel();
+                SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dy, false);
+                print(directionToGo);
+                activeTimerVertical = Timer.periodic(const Duration(milliseconds:  10), (timer) {
+                  Edge edge = whichWallIsIt(left: _left, top: _top, validTop: validTopValue, validLeft: validLeftValue);
+                  if(directionToGo == SwipeDirection.bottom) {
+                    if(edge == Edge.bottom) {
+                      directionToGo = SwipeDirection.top;
                     }
-                  } else if(directionToGo == SwipeDirection.left) {
-                    if(isOnLeftEnd(_left)) {
-                      directionToGo = SwipeDirection.right;
+                  } else if(directionToGo == SwipeDirection.top) {
+                    if(edge == Edge.top) {
+                      directionToGo = SwipeDirection.bottom;
                     }
                   }
                   setState(() {
-                    if(directionToGo == SwipeDirection.right) {
-                      _left = _left + 1;
-                    } else if(directionToGo == SwipeDirection.left) {
-                      _left = _left - 1;
+                    if(directionToGo == SwipeDirection.bottom) {
+                      _top = _top + 1;
+                    } else if(directionToGo == SwipeDirection.top) {
+                      _top = _top - 1;
                     }
                   });
                 });
               },
-              onPanUpdate: (DragUpdateDetails details) {
-                double newTop = min(max(0, _top + details.delta.dy), validTopValue);
-                double newLeft = min(max(0, _left + details.delta.dx), validLeftValue);
-                setState(() {
-                  _top = widget.velocity + newTop;
-                  _left = widget.velocity + newLeft;
-                });
-              },
+              // onHorizontalDragEnd: (DragEndDetails details) {
+              //   activeTimerHorizontal.cancel();
+              //   SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx, true);
+              //   activeTimerHorizontal = Timer.periodic(const Duration(milliseconds: 10), (timer) {
+              //     Edge edge = whichWallIsIt(left: _left, top: _top, validTop: validTopValue, validLeft: validLeftValue);
+              //     if(directionToGo == SwipeDirection.right) {
+              //       if(edge == Edge.right) {
+              //         directionToGo = SwipeDirection.left;
+              //       }
+              //     } else if(directionToGo == SwipeDirection.left) {
+              //       if(edge == Edge.left) {
+              //         directionToGo = SwipeDirection.right;
+              //       }
+              //     }
+              //     // setState(() {
+              //     //   if(directionToGo == SwipeDirection.right) {
+              //     //     _left = _left + 1;
+              //     //   } else if(directionToGo == SwipeDirection.left) {
+              //     //     _left = _left - 1;
+              //     //   }
+              //     // });
+              //   });
+              // },
               child: Container(
                 height: widget.squareSize,
                 width: widget.squareSize,

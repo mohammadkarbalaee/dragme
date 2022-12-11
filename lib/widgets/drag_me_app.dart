@@ -7,15 +7,27 @@ class DragMeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double squareSize = MediaQuery.of(context).size.height / 7;
+    double initialLeft = (MediaQuery.of(context).size.width - squareSize) / 2;
+    double initialTop = (MediaQuery.of(context).size.height - squareSize) / 2;
     return Scaffold(
-      body: DraggableSquare()
+      body: DraggableSquare(
+        squareSize: squareSize,
+        initialLeft: initialLeft,
+        initialTop: initialTop,
+      )
     );
   }
 }
 
 
 class DraggableSquare extends StatefulWidget {
-  DraggableSquare({super.key});
+  double initialTop;
+  double initialLeft;
+  double squareSize;
+
+  DraggableSquare({required this.squareSize, required this.initialTop,required this.initialLeft});
+
   @override
   State createState() => _DraggableSquareState();
 }
@@ -25,10 +37,16 @@ class _DraggableSquareState extends State<DraggableSquare> {
   double _top = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _left = widget.initialLeft;
+    _top = widget.initialTop;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    double squareSize = MediaQuery.of(context).size.width / 5;
-    double validTopValue = MediaQuery.of(context).size.height - squareSize;
-    double validLeftValue = MediaQuery.of(context).size.width - squareSize;
+    double validTopValue = MediaQuery.of(context).size.height - widget.squareSize;
+    double validLeftValue = MediaQuery.of(context).size.width - widget.squareSize;
 
     return Stack(
       children: <Widget>[
@@ -45,8 +63,8 @@ class _DraggableSquareState extends State<DraggableSquare> {
                 });
               },
               child: Container(
-                height: squareSize,
-                width: squareSize,
+                height: widget.squareSize,
+                width: widget.squareSize,
                 color: Colors.red,
               )
           ),

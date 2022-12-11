@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:dragme/widgets/swipe_direction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,12 +43,16 @@ class _DraggableSquareState extends State<DraggableSquare> {
   double _top = 0;
   Timer activeTimerHorizontal = Timer(const Duration(seconds: 0), (){});
   Timer activeTimerVertical = Timer(const Duration(seconds: 0), (){});
+  AudioPlayer player = AudioPlayer();
+  Source source = AssetSource('audios/ballhit.wav');
 
   @override
   void initState() {
     super.initState();
     _left = widget.initialLeft;
     _top = widget.initialTop;
+    player = AudioPlayer();
+    source = AssetSource('audios/ballhit.wav');
   }
 
   SwipeDirection detectSwipeDirection(double difference,bool isHorizontal) {
@@ -116,13 +121,15 @@ class _DraggableSquareState extends State<DraggableSquare> {
               onVerticalDragEnd: (DragEndDetails details) {
                 activeTimerVertical.cancel();
                 SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dy, false);
-                activeTimerVertical = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) {
+                activeTimerVertical = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
                     if(directionToGo == SwipeDirection.bottom) {
                       if(isOnBottomEdge(validTopValue)) {
+                        player.play(source);
                         directionToGo = SwipeDirection.top;
                       }
                     } else if(directionToGo == SwipeDirection.top) {
                       if(isOnTopEdge()) {
+                        player.play(source);
                         directionToGo = SwipeDirection.bottom;
                       }
                     }
@@ -139,13 +146,15 @@ class _DraggableSquareState extends State<DraggableSquare> {
               onHorizontalDragEnd: (DragEndDetails details) {
                 activeTimerHorizontal.cancel();
                 SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx, true);
-                activeTimerHorizontal = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) {
+                activeTimerHorizontal = Timer.periodic(Duration(milliseconds: widget.velocity), (timer) async {
                     if(directionToGo == SwipeDirection.right) {
                       if(isOnRightEdge(validLeftValue)) {
+                        player.play(source);
                         directionToGo = SwipeDirection.left;
                       }
                     } else if(directionToGo == SwipeDirection.left) {
                       if(isOnLeftEdge()) {
+                        player.play(source);
                         directionToGo = SwipeDirection.right;
                       }
                     }

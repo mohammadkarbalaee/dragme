@@ -1,16 +1,15 @@
-# dragme
+# Drag Me
+Throw your own ball on the pitch. 
 
-A new Flutter project.
+## What I did
+I built the walls and collision first. That was the main challenge that
+I faced during the development process. 
 
-## Getting Started
+## The Images
+I had already built a dataset of 200 soccer balls
+which I found fun to use in this project too so I used them. 
+The images are fetched from the web.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## On web
+Drag me is also available on web. 
+[Here is the link](https://muhammadkarbalaee.github.io/dragme/#/)

@@ -68,7 +68,6 @@ class _DraggableSquareState extends State<DraggableSquare> {
   bool isOnLeftEnd(double left) {
     bool isOnRightEnd = false;
     if(left.floor() == 0) {
-      print('on left');
       isOnRightEnd = true;
     }
     return isOnRightEnd;
@@ -86,25 +85,28 @@ class _DraggableSquareState extends State<DraggableSquare> {
           top: _top,
           child: GestureDetector(
               onHorizontalDragUpdate: (DragUpdateDetails details) {
-                SwipeDirection direction = detectSwipeDirection(details.delta.dx);
+
               },
               onHorizontalDragEnd: (DragEndDetails details) {
-                int directionToGo = 1;
-                Timer.periodic(const Duration(milliseconds: 10), (timer) {
-                  if(directionToGo == 1) {
+                SwipeDirection directionToGo = detectSwipeDirection(details.velocity.pixelsPerSecond.dx);
+                Timer.periodic(const Duration(milliseconds: 1), (timer) {
+                  if(directionToGo == SwipeDirection.right) {
                     if(isOnRightEnd(_left, validLeftValue)) {
-                      directionToGo = -1;
+                      directionToGo = SwipeDirection.left;
                     }
-                  } else if(directionToGo == -1) {
+                  } else if(directionToGo == SwipeDirection.left) {
                     if(isOnLeftEnd(_left)) {
-                      directionToGo = 1;
+                      directionToGo = SwipeDirection.right;
                     }
                   }
                   setState(() {
-                    _left = _left + directionToGo;
+                    if(directionToGo == SwipeDirection.right) {
+                      _left = _left + 1;
+                    } else if(directionToGo == SwipeDirection.left) {
+                      _left = _left - 1;
+                    }
                   });
                 });
-                print(details.velocity.pixelsPerSecond.dx);
               },
               onPanUpdate: (DragUpdateDetails details) {
                 double newTop = min(max(0, _top + details.delta.dy), validTopValue);

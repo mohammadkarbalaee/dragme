@@ -14,7 +14,8 @@ void main() {
  * TODO: create a blank project ✅
  * TODO: push the project to github ✅
  * TODO: make an square in the middle of the screen ✅
- * TODO: make the square draggable
+ * TODO: make the square draggable ✅
+ * TODO: make the square bouncing
  * TODO: make the square contain image
  * TODO: get the image from and api from the internet
  * TODO: make the image changeable on tap

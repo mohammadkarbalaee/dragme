@@ -1,8 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.github.muhammadkarbalaee.dragme">
-    <uses-permission android:name="android.permission.INTERNET"/>
-   <application
-        android:label="Drag Me"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application
+        android:label="dragme"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

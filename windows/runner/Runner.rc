@@ -89,11 +89,11 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "io.github.muhammadkarbalaee" "\0"
+            VALUE "CompanyName", "com.example" "\0"
             VALUE "FileDescription", "dragme" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "dragme" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 io.github.muhammadkarbalaee. All rights reserved." "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "dragme.exe" "\0"
             VALUE "ProductName", "dragme" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"

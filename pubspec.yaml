@@ -47,10 +47,6 @@ dev_dependencies:
 flutter_icons:
   image_path: "assets/image/icon.png"
   android: true
-  ios: true
-  remove_alpha_ios: true
-  web:
-    generate: true
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -32,7 +32,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.example.dragme"
+    namespace "io.github.mohammad.karbalaee.dragme"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
